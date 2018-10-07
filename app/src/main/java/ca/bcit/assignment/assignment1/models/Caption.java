@@ -22,10 +22,14 @@ public class Caption {
     @NonNull
     private Date whenCreated;
 
+    @ColumnInfo(name = "location")
+    private String location;
+
     public Caption(String image) {
         setImage(image);
         setCaption(null);
         setWhenCreated(new Date());
+        setLocation("");
     }
 
     public void setImage(String image) {
@@ -54,5 +58,13 @@ public class Caption {
 
     public Date getWhenCreated() {
         return whenCreated;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getLocation() {
+        return location;
     }
 }
