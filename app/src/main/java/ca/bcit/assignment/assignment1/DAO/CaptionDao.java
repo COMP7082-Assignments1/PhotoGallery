@@ -7,6 +7,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,14 +21,20 @@ public interface CaptionDao {
     @Query("SELECT * FROM Caption")
     public Caption[] loadAllCaptions();
 
+    @Query("SELECT DISTINCT location FROM Caption")
+    public List<String> getAllLocations();
+
     @Query("SELECT * FROM Caption WHERE image = :image LIMIT 1")
     public Caption findCaptionByImage(String image);
 
-    @Query("SELECT * FROM Caption WHERE (whenCreated BETWEEN :from AND :to) AND (caption LIKE :search)")
-    public List<Caption> findImagesWithCaptionBetweenDates(Date from, Date to, String search);
+    @Query("SELECT * FROM Caption WHERE (whenCreated BETWEEN :from AND :to) AND (caption LIKE :search) AND (location IN (:locations))")
+    public List<Caption> findImagesByCaptionDatesLocation(Date from, Date to, String search, String[] locations);
 
-    @Query("SELECT * FROM Caption WHERE whenCreated BETWEEN :from AND :to")
-    public List<Caption> findImagesBetweenDates(Date from, Date to);
+    @Query("SELECT * FROM Caption WHERE (whenCreated BETWEEN :from AND :to) AND (location IN (:locations))")
+    public List<Caption> findImagesByDatesLocation(Date from, Date to, String[] locations);
+
+    @Query("SELECT * FROM Caption WHERE (whenCreated BETWEEN :from AND :to)")
+    public List<Caption> findImagesByDates(Date from, Date to);
 
     @Update
     public void updateCaptions(Caption... captions);
